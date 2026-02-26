@@ -1,0 +1,25 @@
+{
+  "name": "assignmate",
+  "version": "1.0.0",
+  "description": "Kevin Santizo 4WP3 Project",
+  "main": "app.ctrl.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kevinsantizogit/Assignmate.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kevinsantizogit/Assignmate/issues"
+  },
+  "homepage": "https://github.com/kevinsantizogit/Assignmate#readme",
+  "dependencies": {
+    "express": "^5.2.1",
+    "mustache-express": "^1.3.2"
+  }
+}
