@@ -1,0 +1,24 @@
+.topnav {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.topnav a {
+  text-decoration: none;
+  color: #222;
+  padding: 6px 10px;
+  border-radius: 6px;
+}
+
+.topnav a.curnav {
+  background: #222;
+  color: #fff;
+}
+
+.footer {
+  color: #666;
+  font-size: 13px;
+}
