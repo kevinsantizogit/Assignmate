@@ -19,6 +19,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", require("./controllers/home.ctrl"));
+app.use("/tasks", require("./controllers/tasks.ctrl"));
 
 app.listen(PORT, () => {
   console.log(`Running: http://localhost:${PORT}`);
