@@ -1,21 +1,35 @@
 {{> partials/header}}
 
-<h1>{{appName}} - Tasks</h1>
+<div class="row space">
+  <h1>Tasks</h1>
+  <a class="linkbtn" href="/tasks/new">+ New Task</a>
+</div>
 
-<ul>
-  {{#tasks}}
-    <li>
-      <strong>{{title}}</strong> ({{course}})
-      — due {{due_date}}
-      {{#grade_weight}}— weight: {{grade_weight}}%{{/grade_weight}}
-      {{#completed}}— Completed {{/completed}}
-      {{^completed}}— Incomplete{{/completed}}
-    </li>
-  {{/tasks}}
-</ul>
+{{#tasks}}
+  <div class="card taskrow">
+    <div>
+      <div class="titleline">
+        <a href="/tasks/{{id}}"><strong>{{title}}</strong></a>
+      </div>
+      <div class="subline">{{course}} • {{task_type}} • due {{due_date}}</div>
+    </div>
+    <div class="row">
+      <form method="POST" action="/tasks/{{id}}/toggle">
+        <button type="submit">
+          {{#completed}}Mark Incomplete{{/completed}}
+          {{^completed}}Mark Complete{{/completed}}
+        </button>
+      </form>
+      <a class="linkbtn" href="/tasks/{{id}}/edit">Edit</a>
+      <form method="POST" action="/tasks/{{id}}/delete">
+        <button type="submit" class="danger">Delete</button>
+      </form>
+    </div>
+  </div>
+{{/tasks}}
 
 {{^tasks}}
-  <p>No tasks yet</p>
+  <p>No tasks yet. Click "New Task".</p>
 {{/tasks}}
 
 {{> partials/footer}}

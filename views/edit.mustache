@@ -1,0 +1,28 @@
+{{> partials/header}}
+
+<h1>Edit Task</h1>
+
+<form method="POST" action="/tasks/{{task.id}}" class="card">
+  <label>Title</label>
+  <input name="title" value="{{task.title}}" required>
+
+  <label>Course</label>
+  <input name="course" value="{{task.course}}" required>
+
+  <label>Task Type</label>
+  <input name="task_type" value="{{task.task_type}}" required>
+
+  <label>Due Date</label>
+  <input type="date" name="due_date" value="{{task.due_date}}" required>
+
+  <label>Grade Weight (%)</label>
+  <input type="number" step="0.1" name="grade_weight" value="{{task.grade_weight}}">
+
+  <label>Notes</label>
+  <textarea name="notes" rows="4">{{task.notes}}</textarea>
+
+  <button type="submit">Save</button>
+  <a href="/tasks/{{task.id}}" class="linkbtn">Cancel</a>
+</form>
+
+{{> partials/footer}}

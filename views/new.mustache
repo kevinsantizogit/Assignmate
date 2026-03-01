@@ -1,0 +1,28 @@
+{{> partials/header}}
+
+<h1>New Task</h1>
+
+<form method="POST" action="/tasks" class="card">
+  <label>Title</label>
+  <input name="title" required>
+
+  <label>Course</label>
+  <input name="course" required>
+
+  <label>Task Type</label>
+  <input name="task_type" placeholder="Quiz / Exam / Assignment" required>
+
+  <label>Due Date</label>
+  <input type="date" name="due_date" required>
+
+  <label>Grade Weight (%)</label>
+  <input type="number" step="0.1" name="grade_weight" placeholder="e.g. 15.5">
+
+  <label>Notes</label>
+  <textarea name="notes" rows="4" placeholder="Optional"></textarea>
+
+  <button type="submit">Create</button>
+  <a href="/tasks" class="linkbtn">Cancel</a>
+</form>
+
+{{> partials/footer}}
