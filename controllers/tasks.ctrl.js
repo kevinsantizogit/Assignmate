@@ -6,7 +6,17 @@ router.get("/", async (req, res) => {
   try {
     req.TPL.pageTitle = "Tasks";
     req.TPL.tasksnav = true;
-    req.TPL.tasks = await TasksModel.getAll();
+
+    const tasks = await TasksModel.getAll();
+
+    req.TPL.tasks = tasks;
+    req.TPL.taskCount = tasks.length;
+
+    req.TPL.incompleteCount = tasks.filter(t => t.completed === 0).length;
+    req.TPL.completeCount = tasks.filter(t => t.completed === 1).length;
+
+    req.TPL.courses = [...new Set(tasks.map(t => t.course))].sort();
+
     res.render("tasks", req.TPL);
   } catch (err) {
     console.error(err);
