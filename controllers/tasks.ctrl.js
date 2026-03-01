@@ -1,20 +1,17 @@
 const express = require("express");
 const router = express.Router();
+const TasksModel = require("../models/tasks.model");
 
-router.use((req, res, next) => {
-  req.TPL.tasksnav = true;
-  next();
-});
-
-router.get("/", (req, res) => {
-  req.TPL.pageTitle = "Tasks";
-  req.TPL.tasksnav = true;
-
-  req.TPL.tasks = [
-    { title: "Finish Deliverable", course: "4WP3" },
-    { title: "Configure SQL", course: "4WP3" }
-  ];
-  res.render("tasks", req.TPL);
+router.get("/", async (req, res) => {
+  try {
+    req.TPL.pageTitle = "Tasks";
+    req.TPL.tasksnav = true;
+    req.TPL.tasks = await TasksModel.getAll();
+    res.render("tasks", req.TPL);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Something went wrong loading tasks.");
+  }
 });
 
 module.exports = router;
