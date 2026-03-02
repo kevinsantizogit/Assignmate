@@ -1,0 +1,5 @@
+Step by step guide to run the Assignmate app:
+
+1 - Install javascript packages using this command: npm Install
+2 - Run the app using this command: node app.ctrl.js
+3 - Finally, open the following link: http://localhost:3000
