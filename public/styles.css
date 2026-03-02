@@ -293,6 +293,22 @@ body {
   .stats {
     grid-template-columns: 1fr 1fr;
   }
+
+  .taskcard {
+    grid-template-columns: 28px 1fr;
+    grid-template-areas:
+      "check main"
+      "actions actions";
+  }
+
+  .taskleft { grid-area: check; }
+  .taskmain { grid-area: main; }
+  .taskactions {
+    grid-area: actions;
+    justify-content: flex-end;
+  }
+
+  .searchwrap form { width: 100%; }
 }
 
 .err {
