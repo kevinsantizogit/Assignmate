@@ -120,20 +120,6 @@ router.post("/:id", async (req, res) => {
   }
 });
 
-router.get("/:id/edit", async (req, res) => {
-  try {
-    const id = Number(req.params.id);
-    const task = await TasksModel.getById(id);
-    if (!task) return res.status(404).send("Task not found.");
-    req.TPL.pageTitle = "Edit Task";
-    req.TPL.tasksnav = true;
-    req.TPL.task = task;
-    res.render("edit", req.TPL);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send("Could not load edit page.");
-  }
-});
 
 router.post("/:id", async (req, res) => {
   try {
@@ -176,4 +162,21 @@ router.post("/:id/toggle", async (req, res) => {
   }
 });
 
+router.get("/:id", async (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    const task = await TasksModel.getById(id);
+
+    if (!task) return res.status(404).send("Task not found.");
+
+    req.TPL.pageTitle = "Task Details";
+    req.TPL.tasksnav = true;
+    req.TPL.task = task;
+
+    res.render("task", req.TPL);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Could not load task.");
+  }
+});
 module.exports = router;

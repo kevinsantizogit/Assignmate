@@ -1,0 +1,53 @@
+{{> partials/header}}
+
+<div class="page">
+  <div class="card">
+
+    <h1 style="margin-top:0;">{{task.title}}</h1>
+
+    <div class="meta" style="margin-top:8px;">
+      <span><strong>Course:</strong> {{task.course}}</span>
+      <span>•</span>
+      <span><strong>Type:</strong> {{task.task_type}}</span>
+      <span>•</span>
+      <span><strong>Due:</strong> {{task.due_date}}</span>
+    </div>
+
+    {{#task.grade_weight}}
+      <div style="margin-top:10px;">
+        <span class="tag soft">{{task.grade_weight}}%</span>
+      </div>
+    {{/task.grade_weight}}
+
+    {{#task.notes}}
+      <div style="margin-top:14px;">
+        <strong>Notes</strong>
+        <div style="color:#444; margin-top:6px;">
+          {{task.notes}}
+        </div>
+      </div>
+    {{/task.notes}}
+
+    <div style="margin-top:14px;">
+      <strong>Status:</strong>
+      {{#task.completed}}Complete {{/task.completed}}
+      {{^task.completed}}Incomplete {{/task.completed}}
+    </div>
+
+    <div class="row" style="margin-top:18px;">
+      <a class="iconbtn" href="/tasks/{{task.id}}/edit">✏ Edit</a>
+
+      <form method="POST" action="/tasks/{{task.id}}/delete" style="margin:0;">
+        <button class="iconbtn danger" type="submit"
+          onclick="return confirm('Delete this task?')">
+          🗑 Delete
+        </button>
+      </form>
+
+      <a class="linkbtn" href="/tasks">Back to Tasks</a>
+    </div>
+
+  </div>
+</div>
+
+{{> partials/footer}}
