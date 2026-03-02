@@ -1,4 +1,24 @@
-<div class="topnav">
-  <a href="/" {{#homenav}}class="curnav"{{/homenav}}>Home</a>
-  <a href="/tasks" {{#tasksnav}}class="curnav"{{/tasksnav}}>Tasks</a>
-</div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{pageTitle}}</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+
+<header class="appbar">
+  <div class="brand">
+    <div class="appicon">✓</div>
+    <div class="brandtext">
+      <div class="appname">Assignmate</div>
+      <div class="apptag">Student Task Manager</div>
+    </div>
+  </div>
+
+  <nav class="navlinks">
+    <a href="/" class="{{#homenav}}active{{/homenav}}">Home</a>
+    <a href="/tasks" class="{{#tasksnav}}active{{/tasksnav}}">Tasks</a>
+  </nav>
+</header>

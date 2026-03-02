@@ -1,35 +1,96 @@
 {{> partials/header}}
 
-<div class="row space">
-  <h1>Tasks</h1>
-  <a class="linkbtn" href="/tasks/new">+ New Task</a>
-</div>
-
-{{#tasks}}
-  <div class="card taskrow">
-    <div>
-      <div class="titleline">
-        <a href="/tasks/{{id}}"><strong>{{title}}</strong></a>
-      </div>
-      <div class="subline">{{course}} • {{task_type}} • due {{due_date}}</div>
+<div class="page">
+  <div class="top">
+    <div class="searchwrap">
+      <form method="GET" action="/tasks">
+        <input class="search" name="search" placeholder="Search tasks..." value="{{search}}">
+      </form>
     </div>
-    <div class="row">
-      <form method="POST" action="/tasks/{{id}}/toggle">
-        <button type="submit">
-          {{#completed}}Mark Incomplete{{/completed}}
-          {{^completed}}Mark Complete{{/completed}}
-        </button>
-      </form>
-      <a class="linkbtn" href="/tasks/{{id}}/edit">Edit</a>
-      <form method="POST" action="/tasks/{{id}}/delete">
-        <button type="submit" class="danger">Delete</button>
-      </form>
+    <div class="stats">
+      <div class="statcard">
+        <div class="statlabel">Incomplete</div>
+        <div class="statnum incomplete">{{incompleteCount}}</div>
+      </div>
+      <div class="statcard">
+        <div class="statlabel">Complete</div>
+        <div class="statnum complete">{{completeCount}}</div>
+      </div>
     </div>
   </div>
-{{/tasks}}
 
-{{^tasks}}
-  <p>No tasks yet. Click "New Task".</p>
-{{/tasks}}
+  <div class="grid">
+    <aside class="filters">
+      <form method="GET" action="/tasks">
+        <div class="filtersTitle"> Filters</div>
 
-{{> partials/footer}}
+        <label class="filterLabel">Course</label>
+        <select class="filterSelect" name="course">
+          <option value="">All Courses</option>
+          {{#courses}}
+            <option value="{{name}}" {{#selected}}selected{{/selected}}>{{name}}</option>
+          {{/courses}}
+        </select>
+
+        <label class="filterLabel">Status</label>
+        <select class="filterSelect" name="status">
+          <option value="">All Statuses</option>
+          <option value="incomplete" {{#statusIncomplete}}selected{{/statusIncomplete}}>Incomplete</option>
+          <option value="complete" {{#statusComplete}}selected{{/statusComplete}}>Complete</option>
+        </select>
+
+        <div class="newTaskWrap">
+          <button class="primaryBtn" type="submit">Apply Filters</button>
+        </div>
+      </form>
+
+      <div style="margin-top:10px;">
+        <a class="primaryBtn" href="/tasks/new">+ New Task</a>
+      </div>
+    </aside>
+
+    <section class="list">
+      <div class="listHeader">
+        <div class="listTitle">Showing {{taskCount}} tasks</div>
+      </div>
+
+      {{#tasks}}
+        <div class="taskcard {{#completed}}done{{/completed}}">
+          <div class="taskleft">
+            <form method="POST" action="/tasks/{{id}}/toggle">
+              <input type="checkbox" class="check" {{#completed}}checked{{/completed}} onchange="this.form.submit()">
+            </form>
+          </div>
+
+          <div class="taskmain">
+            <div class="tasktitle">
+              <a href="/tasks/{{id}}">{{title}}</a>
+            </div>
+            <div class="tags">
+              <span class="tag">{{task_type}}</span>
+              {{#grade_weight}}
+                <span class="tag soft">{{grade_weight}}%</span>
+              {{/grade_weight}}
+            </div>
+            <div class="meta">
+              <span>{{course}}</span>
+              <span>•</span>
+              <span>Due: {{due_date}}</span>
+            </div>
+          </div>
+
+          <div class="taskactions">
+            <a class="iconbtn" href="/tasks/{{id}}/edit">✏ Edit</a>
+            <form method="POST" action="/tasks/{{id}}/delete">
+              <button class="iconbtn danger" type="submit">🗑 Delete</button>
+            </form>
+          </div>
+        </div>
+      {{/tasks}}
+
+      {{^tasks}}
+        <div class="empty">No tasks yet.</div>
+      {{/tasks}}
+    </section>
+  </div>
+</div>

@@ -9,13 +9,43 @@ router.get("/", async (req, res) => {
 
     const tasks = await TasksModel.getAll();
 
-    req.TPL.tasks = tasks;
-    req.TPL.taskCount = tasks.length;
+    const search = (req.query.search || "").trim().toLowerCase();
+    const course = (req.query.course || "").trim();
+    const status = (req.query.status || "").trim();
+
+    let filtered = tasks;
+
+    if (course) {
+      filtered = filtered.filter(t => t.course === course);
+    }
+
+    if (status === "complete") {
+      filtered = filtered.filter(t => t.completed === 1);
+    } else if (status === "incomplete") {
+      filtered = filtered.filter(t => t.completed === 0);
+    }
+
+    if (search) {
+      filtered = filtered.filter(t =>
+        (t.title || "").toLowerCase().includes(search) ||
+        (t.course || "").toLowerCase().includes(search) ||
+        (t.task_type || "").toLowerCase().includes(search) ||
+        (t.notes || "").toLowerCase().includes(search)
+      );
+    }
 
     req.TPL.incompleteCount = tasks.filter(t => t.completed === 0).length;
     req.TPL.completeCount = tasks.filter(t => t.completed === 1).length;
 
-    req.TPL.courses = [...new Set(tasks.map(t => t.course))].sort();
+    const courseList = [...new Set(tasks.map(t => t.course))].sort();
+    req.TPL.courses = courseList.map(c => ({ name: c, selected: c === course }));
+
+    req.TPL.search = req.query.search || "";
+    req.TPL.statusIncomplete = status === "incomplete";
+    req.TPL.statusComplete = status === "complete";
+
+    req.TPL.tasks = filtered;
+    req.TPL.taskCount = filtered.length;
 
     res.render("tasks", req.TPL);
   } catch (err) {
@@ -32,15 +62,24 @@ router.get("/new", (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const task = {
-      title: req.body.title,
-      course: req.body.course,
-      task_type: req.body.task_type,
-      due_date: req.body.due_date,
-      notes: req.body.notes,
-      grade_weight: req.body.grade_weight ? Number(req.body.grade_weight) : null
-    };
-    await TasksModel.create(task);
+    const result = validateTask(req.body);
+
+    if (!result.ok) {
+      req.TPL.pageTitle = "New Task";
+      req.TPL.tasksnav = true;
+      req.TPL.errors = result.errors;
+      req.TPL.form = {
+        title: req.body.title || "",
+        course: req.body.course || "",
+        task_type: req.body.task_type || "",
+        due_date: req.body.due_date || "",
+        grade_weight: req.body.grade_weight || "",
+        notes: req.body.notes || ""
+      };
+      return res.status(400).render("new", req.TPL);
+    }
+
+    await TasksModel.create(result.clean);
     res.redirect("/tasks");
   } catch (err) {
     console.error(err);
@@ -48,18 +87,35 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.post("/:id", async (req, res) => {
   try {
     const id = Number(req.params.id);
-    const task = await TasksModel.getById(id);
-    if (!task) return res.status(404).send("Task not found.");
-    req.TPL.pageTitle = "Task Details";
-    req.TPL.tasksnav = true;
-    req.TPL.task = task;
-    res.render("task", req.TPL);
+    const existing = await TasksModel.getById(id);
+    if (!existing) return res.status(404).send("Task not found.");
+
+    const result = validateTask(req.body);
+
+    if (!result.ok) {
+      req.TPL.pageTitle = "Edit Task";
+      req.TPL.tasksnav = true;
+      req.TPL.errors = result.errors;
+      req.TPL.task = {
+        id,
+        title: req.body.title || "",
+        course: req.body.course || "",
+        task_type: req.body.task_type || "",
+        due_date: req.body.due_date || "",
+        grade_weight: req.body.grade_weight || "",
+        notes: req.body.notes || ""
+      };
+      return res.status(400).render("edit", req.TPL);
+    }
+
+    await TasksModel.update(id, result.clean);
+    res.redirect(`/tasks/${id}`);
   } catch (err) {
     console.error(err);
-    res.status(500).send("Could not load task.");
+    res.status(500).send("Could not update task.");
   }
 });
 
