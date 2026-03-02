@@ -2,27 +2,37 @@
 
 <h1>New Task</h1>
 
-<form method="POST" action="/tasks" class="card">
+<form method="POST" action="/tasks" class="card" id="taskForm">
   <label>Title</label>
-  <input name="title" required>
+  <input name="title" value="{{form.title}}" required maxlength="60">
+  {{#errors.title}}<div class="err">{{errors.title}}</div>{{/errors.title}}
 
   <label>Course</label>
-  <input name="course" required>
+  <input name="course" value="{{form.course}}" required maxlength="40">
+  {{#errors.course}}<div class="err">{{errors.course}}</div>{{/errors.course}}
 
   <label>Task Type</label>
-  <input name="task_type" placeholder="Quiz / Exam / Assignment" required>
+  <input name="task_type" value="{{form.task_type}}" required maxlength="30" placeholder="Quiz / Exam / Assignment">
+  {{#errors.task_type}}<div class="err">{{errors.task_type}}</div>{{/errors.task_type}}
 
   <label>Due Date</label>
-  <input type="date" name="due_date" required>
+  <input type="date" name="due_date" value="{{form.due_date}}" required>
+  {{#errors.due_date}}<div class="err">{{errors.due_date}}</div>{{/errors.due_date}}
 
   <label>Grade Weight (%)</label>
-  <input type="number" step="0.1" name="grade_weight" placeholder="e.g. 15.5">
+  <input type="number" step="0.1" name="grade_weight" value="{{form.grade_weight}}" min="0" max="100" placeholder="e.g. 15.5">
+  {{#errors.grade_weight}}<div class="err">{{errors.grade_weight}}</div>{{/errors.grade_weight}}
 
   <label>Notes</label>
-  <textarea name="notes" rows="4" placeholder="Optional"></textarea>
+  <textarea name="notes" rows="4" maxlength="300" placeholder="Optional">{{form.notes}}</textarea>
+  {{#errors.notes}}<div class="err">{{errors.notes}}</div>{{/errors.notes}}
 
-  <button type="submit">Create</button>
-  <a href="/tasks" class="linkbtn">Cancel</a>
+  <div class="row" style="margin-top:12px;">
+    <button type="submit">Create</button>
+    <a href="/tasks" class="linkbtn">Cancel</a>
+  </div>
 </form>
+
+<script src="/validate.js"></script>
 
 {{> partials/footer}}
